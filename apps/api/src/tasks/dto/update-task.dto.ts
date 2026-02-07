@@ -1,5 +1,5 @@
 import { IsString, IsOptional, IsEnum } from 'class-validator';
-import { TaskStatus } from '../../entities/task.entity';
+import { TaskStatus, TaskPriority } from '../../entities/task.entity';
 
 export class UpdateTaskDto {
   @IsString()
@@ -13,6 +13,10 @@ export class UpdateTaskDto {
   @IsEnum(['todo', 'in_progress', 'done'])
   @IsOptional()
   status?: TaskStatus;
+
+  @IsEnum(['low', 'medium', 'high', 'critical'])
+  @IsOptional()
+  priority?: TaskPriority;
 
   @IsString()
   @IsOptional()

@@ -115,7 +115,16 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
       // Update task status if moved to different column
       if (task.status !== newStatus) {
-        this.taskStore.updateTaskEffect({ id: task.id, dto: { status: newStatus } });
+        // Store original task for rollback
+        const originalTask = { ...task };
+        // Optimistic update: Update UI immediately
+        this.taskStore.updateTaskOptimistic({ id: task.id, changes: { status: newStatus } });
+        // Then sync with server (with rollback support)
+        this.taskStore.updateTaskEffect({ 
+          id: task.id, 
+          dto: { status: newStatus },
+          rollbackTask: originalTask
+        });
       }
     }
   }
@@ -137,20 +146,38 @@ export class TaskListComponent implements OnInit, OnDestroy {
 
   onSaveTask(dto: CreateTaskDto | UpdateTaskDto): void {
     if (this.editingTask) {
-      this.taskStore.updateTaskEffect({ id: this.editingTask.id, dto: dto as UpdateTaskDto });
+      const taskId = this.editingTask.id;
+      const originalTask = { ...this.editingTask };
+      // Optimistic update: Update UI immediately
+      this.taskStore.updateTaskOptimistic({ id: taskId, changes: dto });
+      // Close form immediately
+      this.showTaskForm = false;
+      this.editingTask = null;
+      // Then sync with server (with rollback support)
+      this.taskStore.updateTaskEffect({ 
+        id: taskId, 
+        dto: dto as UpdateTaskDto,
+        rollbackTask: originalTask
+      });
     } else {
       this.taskStore.createTask(dto as CreateTaskDto);
+      this.showTaskForm = false;
+      this.editingTask = null;
     }
-    this.showTaskForm = false;
-    this.editingTask = null;
   }
 
   onConfirmDelete(): void {
     if (this.deletingTask) {
-      this.taskStore.deleteTaskEffect(this.deletingTask.id);
+      const taskId = this.deletingTask.id;
+      const taskToDelete = { ...this.deletingTask };
+      // Optimistic update: Remove from UI immediately
+      this.taskStore.removeTaskOptimistic(taskId);
+      // Close dialog immediately
+      this.showConfirmDialog = false;
+      this.deletingTask = null;
+      // Then sync with server (with rollback support)
+      this.taskStore.deleteTaskEffect({ id: taskId, rollbackTask: taskToDelete });
     }
-    this.showConfirmDialog = false;
-    this.deletingTask = null;
   }
 
   onCancelDelete(): void {

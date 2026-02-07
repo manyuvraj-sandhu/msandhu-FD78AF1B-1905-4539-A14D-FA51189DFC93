@@ -4,6 +4,8 @@
 
 export type Role = 'owner' | 'admin' | 'viewer';
 
+export type TaskPriority = 'low' | 'medium' | 'high' | 'critical';
+
 export interface User {
   id: string;
   email: string;
@@ -26,6 +28,7 @@ export interface Task {
   title: string;
   description?: string;
   status: 'todo' | 'in_progress' | 'done';
+  priority: TaskPriority;
   category?: string;
   createdById: string;
   organizationId: string;

@@ -11,7 +11,7 @@ export class AuditController {
   constructor(private readonly auditService: AuditService) {}
 
   @Get()
-  @Roles('admin', 'owner')
+  @Roles('owner')
   getAuditLog(@CurrentUser() user: JwtPayloadDto) {
     return this.auditService.getAuditLog(user);
   }

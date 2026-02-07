@@ -47,7 +47,7 @@ import { ThemeService } from '../../core/services/theme.service';
             </a>
 
             <a
-              *ngIf="isAdminOrOwner"
+              *ngIf="isOwner"
               routerLink="/dashboard/audit"
               routerLinkActive="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300"
               class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition"
@@ -113,8 +113,8 @@ export class DashboardComponent {
     this.theme$ = this.themeService.theme$;
   }
 
-  get isAdminOrOwner(): boolean {
-    return this.authService.hasRole('admin');
+  get isOwner(): boolean {
+    return this.authService.hasRole('owner');
   }
 
   logout(): void {

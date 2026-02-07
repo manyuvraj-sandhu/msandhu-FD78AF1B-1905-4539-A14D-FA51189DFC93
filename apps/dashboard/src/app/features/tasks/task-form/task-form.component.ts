@@ -26,6 +26,7 @@ export class TaskFormComponent implements OnInit {
       title: [this.task?.title || '', [Validators.required, Validators.minLength(1)]],
       description: [this.task?.description || ''],
       status: [this.task?.status || 'todo', Validators.required],
+      priority: [this.task?.priority || 'medium', Validators.required],
       category: [this.task?.category || '']
     });
   }

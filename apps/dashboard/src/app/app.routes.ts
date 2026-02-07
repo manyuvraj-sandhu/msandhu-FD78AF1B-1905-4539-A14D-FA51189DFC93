@@ -37,7 +37,7 @@ export const appRoutes: Route[] = [
       {
         path: 'audit',
         canActivate: [roleGuard],
-        data: { roles: ['owner', 'admin'] },
+        data: { roles: ['owner'] },
         loadComponent: () =>
           import('./features/audit/audit-log.component').then(m => m.AuditLogComponent)
       }

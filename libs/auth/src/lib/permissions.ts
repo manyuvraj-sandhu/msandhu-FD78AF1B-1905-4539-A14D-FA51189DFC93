@@ -5,7 +5,7 @@ export type Permission = 'task:create' | 'task:read' | 'task:update' | 'task:del
 
 const PERMISSION_BY_ROLE: Record<Role, Permission[]> = {
   owner: ['task:create', 'task:read', 'task:update', 'task:delete', 'audit:read'],
-  admin: ['task:create', 'task:read', 'task:update', 'task:delete', 'audit:read'],
+  admin: ['task:create', 'task:read', 'task:update', 'task:delete'],
   viewer: ['task:read'],
 };
 

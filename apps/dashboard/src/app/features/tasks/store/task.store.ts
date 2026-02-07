@@ -123,7 +123,19 @@ export class TaskStore extends ComponentStore<TaskState> {
     tasks: state.tasks.map(task => task.id === updatedTask.id ? updatedTask : task)
   }));
 
+  readonly updateTaskOptimistic = this.updater((state, payload: { id: string; changes: Partial<Task> }) => ({
+    ...state,
+    tasks: state.tasks.map(task => 
+      task.id === payload.id ? { ...task, ...payload.changes } : task
+    )
+  }));
+
   readonly removeTask = this.updater((state, taskId: string) => ({
+    ...state,
+    tasks: state.tasks.filter(task => task.id !== taskId)
+  }));
+
+  readonly removeTaskOptimistic = this.updater((state, taskId: string) => ({
     ...state,
     tasks: state.tasks.filter(task => task.id !== taskId)
   }));
@@ -177,12 +189,16 @@ export class TaskStore extends ComponentStore<TaskState> {
     )
   );
 
-  readonly updateTaskEffect = this.effect<{ id: string; dto: UpdateTaskDto }>(update$ =>
+  readonly updateTaskEffect = this.effect<{ id: string; dto: UpdateTaskDto; rollbackTask?: Task }>(update$ =>
     update$.pipe(
-      switchMap(({ id, dto }) =>
+      switchMap(({ id, dto, rollbackTask }) =>
         this.taskService.updateTask(id, dto).pipe(
           tap((task: Task) => this.updateTaskInState(task)),
           catchError((error: Error) => {
+            // Rollback optimistic update on error
+            if (rollbackTask) {
+              this.updateTaskInState(rollbackTask);
+            }
             this.setError(error.message);
             return EMPTY;
           })
@@ -191,12 +207,16 @@ export class TaskStore extends ComponentStore<TaskState> {
     )
   );
 
-  readonly deleteTaskEffect = this.effect<string>(id$ =>
-    id$.pipe(
-      switchMap(id =>
+  readonly deleteTaskEffect = this.effect<{ id: string; rollbackTask?: Task }>(payload$ =>
+    payload$.pipe(
+      switchMap(({ id, rollbackTask }) =>
         this.taskService.deleteTask(id).pipe(
           tap(() => this.removeTask(id)),
           catchError((error: Error) => {
+            // Rollback optimistic delete on error
+            if (rollbackTask) {
+              this.addTask(rollbackTask);
+            }
             this.setError(error.message);
             return EMPTY;
           })

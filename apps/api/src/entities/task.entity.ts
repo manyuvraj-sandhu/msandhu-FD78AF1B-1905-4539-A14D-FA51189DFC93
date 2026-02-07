@@ -11,6 +11,7 @@ import { User } from './user.entity';
 import { Organization } from './organization.entity';
 
 export type TaskStatus = 'todo' | 'in_progress' | 'done';
+export type TaskPriority = 'low' | 'medium' | 'high' | 'critical';
 
 @Entity('tasks')
 export class Task {
@@ -25,6 +26,9 @@ export class Task {
 
   @Column({ type: 'varchar', default: 'todo' })
   status: TaskStatus;
+
+  @Column({ type: 'varchar', default: 'medium' })
+  priority: TaskPriority;
 
   @Column({ nullable: true })
   category?: string;

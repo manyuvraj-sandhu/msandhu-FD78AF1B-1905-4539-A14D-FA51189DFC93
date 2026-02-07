@@ -2,7 +2,10 @@
   <!-- Header -->
   <div class="mb-6">
     <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Tasks</h1>
-    <p class="text-gray-600 dark:text-gray-400">Manage your tasks with drag-and-drop</p>
+    <p class="text-gray-600 dark:text-gray-400">
+      <span *ngIf="canEdit">Manage your tasks with drag-and-drop</span>
+      <span *ngIf="!canEdit">View your team's tasks</span>
+    </p>
   </div>
 
   <!-- Task Chart -->
@@ -84,7 +87,7 @@
         (cdkDropListDropped)="onDrop($event, 'todo')"
         class="space-y-3 min-h-[200px]"
       >
-        <div *ngFor="let task of todoTasks" cdkDrag>
+        <div *ngFor="let task of todoTasks" [cdkDragDisabled]="!canEdit" cdkDrag>
           <app-task-card
             [task]="task"
             [canEdit]="canEdit"
@@ -110,7 +113,7 @@
         (cdkDropListDropped)="onDrop($event, 'in_progress')"
         class="space-y-3 min-h-[200px]"
       >
-        <div *ngFor="let task of inProgressTasks" cdkDrag>
+        <div *ngFor="let task of inProgressTasks" [cdkDragDisabled]="!canEdit" cdkDrag>
           <app-task-card
             [task]="task"
             [canEdit]="canEdit"
@@ -136,7 +139,7 @@
         (cdkDropListDropped)="onDrop($event, 'done')"
         class="space-y-3 min-h-[200px]"
       >
-        <div *ngFor="let task of doneTasks" cdkDrag>
+        <div *ngFor="let task of doneTasks" [cdkDragDisabled]="!canEdit" cdkDrag>
           <app-task-card
             [task]="task"
             [canEdit]="canEdit"

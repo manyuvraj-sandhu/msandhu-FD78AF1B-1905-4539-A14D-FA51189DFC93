@@ -23,5 +23,5 @@ export function isAdminOrAbove(role: Role): boolean {
 }
 
 export function canViewAuditLog(role: Role): boolean {
-  return isAdminOrAbove(role);
+  return isOwner(role);
 }
