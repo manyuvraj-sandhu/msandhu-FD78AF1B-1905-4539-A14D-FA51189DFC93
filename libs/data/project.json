@@ -1,0 +1,19 @@
+{
+  "name": "data",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/data/src",
+  "tags": ["scope:shared", "type:data"],
+  "targets": {
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p libs/data/tsconfig.lib.json",
+        "cwd": "../../"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

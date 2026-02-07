@@ -25,6 +25,8 @@ node_modules
 !.vscode/extensions.json
 
 # misc
+.env
+.env.local
 /.sass-cache
 /connect.lock
 /coverage
@@ -42,3 +44,7 @@ Thumbs.db
 .nx/workspace-data
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
+
+test-output
+
+.angular

@@ -1,0 +1,168 @@
+<div class="max-w-7xl mx-auto">
+  <!-- Header -->
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Tasks</h1>
+    <p class="text-gray-600 dark:text-gray-400">Manage your tasks with drag-and-drop</p>
+  </div>
+
+  <!-- Task Chart -->
+  <div class="mb-6">
+    <app-task-chart [tasks]="getAllTasks()"></app-task-chart>
+  </div>
+
+  <!-- Filters and Actions -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <!-- Search -->
+      <div class="flex-1">
+        <input
+          id="search-input"
+          type="text"
+          [value]="searchQuery"
+          (input)="onSearchChange($any($event.target).value)"
+          placeholder="Search tasks..."
+          class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <!-- Sort -->
+      <div>
+        <select
+          (change)="onSortChange($any($event.target).value)"
+          class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="createdAt">Sort by Date</option>
+          <option value="title">Sort by Title</option>
+          <option value="status">Sort by Status</option>
+        </select>
+      </div>
+
+      <!-- Add Task Button -->
+      <button
+        *ngIf="canEdit"
+        (click)="openCreateDialog()"
+        class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md transition shadow-md"
+      >
+        + New Task
+      </button>
+    </div>
+
+    <!-- Category Filter -->
+    <div *ngIf="getUniqueCategories().length > 0" class="mt-4 flex flex-wrap gap-2">
+      <span class="text-sm text-gray-600 dark:text-gray-400">Categories:</span>
+      <button
+        *ngFor="let category of getUniqueCategories()"
+        (click)="toggleCategory(category)"
+        [class.bg-blue-600]="selectedCategories.includes(category)"
+        [class.text-white]="selectedCategories.includes(category)"
+        [class.bg-gray-200]="!selectedCategories.includes(category)"
+        [class.text-gray-700]="!selectedCategories.includes(category)"
+        class="px-3 py-1 text-xs rounded-full dark:bg-gray-700 dark:text-gray-300 hover:opacity-80 transition"
+      >
+        {{ category }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <app-loading-spinner *ngIf="loading$ | async"></app-loading-spinner>
+
+  <!-- Task Columns -->
+  <div *ngIf="!(loading$ | async)" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- To Do Column -->
+    <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+        <span class="w-3 h-3 bg-gray-500 rounded-full mr-2"></span>
+        To Do
+        <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">({{ todoTasks.length }})</span>
+      </h2>
+      <div
+        cdkDropList
+        #todoList="cdkDropList"
+        [cdkDropListData]="todoTasks"
+        [cdkDropListConnectedTo]="[inProgressList, doneList]"
+        (cdkDropListDropped)="onDrop($event, 'todo')"
+        class="space-y-3 min-h-[200px]"
+      >
+        <div *ngFor="let task of todoTasks" cdkDrag>
+          <app-task-card
+            [task]="task"
+            [canEdit]="canEdit"
+            (edit)="openEditDialog($event)"
+            (delete)="openDeleteDialog($event)"
+          ></app-task-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- In Progress Column -->
+    <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+        <span class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></span>
+        In Progress
+        <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">({{ inProgressTasks.length }})</span>
+      </h2>
+      <div
+        cdkDropList
+        #inProgressList="cdkDropList"
+        [cdkDropListData]="inProgressTasks"
+        [cdkDropListConnectedTo]="[todoList, doneList]"
+        (cdkDropListDropped)="onDrop($event, 'in_progress')"
+        class="space-y-3 min-h-[200px]"
+      >
+        <div *ngFor="let task of inProgressTasks" cdkDrag>
+          <app-task-card
+            [task]="task"
+            [canEdit]="canEdit"
+            (edit)="openEditDialog($event)"
+            (delete)="openDeleteDialog($event)"
+          ></app-task-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- Done Column -->
+    <div class="bg-gray-100 dark:bg-gray-800 rounded-lg p-4">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+        <span class="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+        Done
+        <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">({{ doneTasks.length }})</span>
+      </h2>
+      <div
+        cdkDropList
+        #doneList="cdkDropList"
+        [cdkDropListData]="doneTasks"
+        [cdkDropListConnectedTo]="[todoList, inProgressList]"
+        (cdkDropListDropped)="onDrop($event, 'done')"
+        class="space-y-3 min-h-[200px]"
+      >
+        <div *ngFor="let task of doneTasks" cdkDrag>
+          <app-task-card
+            [task]="task"
+            [canEdit]="canEdit"
+            (edit)="openEditDialog($event)"
+            (delete)="openDeleteDialog($event)"
+          ></app-task-card>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task Form Modal -->
+  <app-task-form
+    *ngIf="showTaskForm"
+    [task]="editingTask"
+    (save)="onSaveTask($event)"
+    (cancel)="showTaskForm = false; editingTask = null"
+  ></app-task-form>
+
+  <!-- Confirm Delete Dialog -->
+  <app-confirm-dialog
+    *ngIf="showConfirmDialog"
+    title="Delete Task"
+    [message]="'Are you sure you want to delete &quot;' + (deletingTask?.title || 'this task') + '&quot;? This action cannot be undone.'"
+    confirmText="Delete"
+    (confirm)="onConfirmDelete()"
+    (cancel)="onCancelDelete()"
+  ></app-confirm-dialog>
+</div>

@@ -1,0 +1,183 @@
+<div class="min-h-screen bg-gradient-to-br from-purple-600 via-blue-600 to-purple-700 flex items-center justify-center px-4 py-8">
+  <!-- Register Card -->
+  <div class="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 transform transition-all duration-300 hover:shadow-3xl max-h-[95vh] overflow-y-auto">
+    <!-- Logo/Icon Section -->
+    <div class="text-center mb-6">
+      <div class="inline-flex items-center justify-center w-18 h-18 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl shadow-lg mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10 text-white">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+        </svg>
+      </div>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Create Account</h1>
+      <p class="text-gray-600 dark:text-gray-400">Join us to manage your tasks efficiently</p>
+    </div>
+
+    <!-- Register Form -->
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
+      <!-- Email Field -->
+      <div>
+        <label for="email" class="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-purple-600 dark:text-purple-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+          </svg>
+          Email Address
+        </label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          formControlName="email"
+          required
+          class="w-full px-4 py-2.5 text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:border-purple-600 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-100 dark:focus:ring-purple-900/30 outline-none transition-all duration-300"
+          [class.border-red-500]="email?.invalid && (email?.dirty || email?.touched)"
+          [class.bg-red-50]="email?.invalid && (email?.dirty || email?.touched)"
+          placeholder="Enter your email"
+        />
+        <div *ngIf="email?.invalid && (email?.dirty || email?.touched)" class="flex items-center gap-2 text-xs text-red-600 dark:text-red-400 mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <span *ngIf="email?.errors?.['required']">Email is required</span>
+          <span *ngIf="email?.errors?.['email']">Please enter a valid email</span>
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div>
+        <label for="password" class="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-purple-600 dark:text-purple-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+          Password
+        </label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          formControlName="password"
+          required
+          class="w-full px-4 py-2.5 text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:border-purple-600 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-100 dark:focus:ring-purple-900/30 outline-none transition-all duration-300"
+          [class.border-red-500]="password?.invalid && (password?.dirty || password?.touched)"
+          [class.bg-red-50]="password?.invalid && (password?.dirty || password?.touched)"
+          placeholder="Create a password (min 6 characters)"
+        />
+        <div *ngIf="password?.invalid && (password?.dirty || password?.touched)" class="flex items-center gap-2 text-xs text-red-600 dark:text-red-400 mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <span *ngIf="password?.errors?.['required']">Password is required</span>
+          <span *ngIf="password?.errors?.['minlength']">Password must be at least 6 characters</span>
+        </div>
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div>
+        <label for="confirmPassword" class="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-purple-600 dark:text-purple-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Confirm Password
+        </label>
+        <input
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          required
+          class="w-full px-4 py-2.5 text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:border-purple-600 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-100 dark:focus:ring-purple-900/30 outline-none transition-all duration-300"
+          [class.border-red-500]="(confirmPassword?.invalid || registerForm.errors?.['passwordMismatch']) && (confirmPassword?.dirty || confirmPassword?.touched)"
+          [class.bg-red-50]="(confirmPassword?.invalid || registerForm.errors?.['passwordMismatch']) && (confirmPassword?.dirty || confirmPassword?.touched)"
+          placeholder="Confirm your password"
+        />
+        <div *ngIf="(confirmPassword?.invalid || registerForm.errors?.['passwordMismatch']) && (confirmPassword?.dirty || confirmPassword?.touched)" class="flex items-center gap-2 text-xs text-red-600 dark:text-red-400 mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <span *ngIf="confirmPassword?.errors?.['required']">Please confirm your password</span>
+          <span *ngIf="registerForm.errors?.['passwordMismatch'] && !confirmPassword?.errors?.['required']">Passwords do not match</span>
+        </div>
+      </div>
+
+      <!-- Organization Field -->
+      <div>
+        <label for="organizationName" class="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-purple-600 dark:text-purple-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" />
+          </svg>
+          Organization Name
+        </label>
+        <input
+          id="organizationName"
+          name="organizationName"
+          type="text"
+          formControlName="organizationName"
+          required
+          class="w-full px-4 py-2.5 text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:border-purple-600 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-100 dark:focus:ring-purple-900/30 outline-none transition-all duration-300"
+          [class.border-red-500]="organizationName?.invalid && (organizationName?.dirty || organizationName?.touched)"
+          [class.bg-red-50]="organizationName?.invalid && (organizationName?.dirty || organizationName?.touched)"
+          placeholder="Enter your organization name"
+        />
+        <div *ngIf="organizationName?.invalid && (organizationName?.dirty || organizationName?.touched)" class="flex items-center gap-2 text-xs text-red-600 dark:text-red-400 mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <span>Organization name is required</span>
+        </div>
+      </div>
+
+      <!-- Role Field -->
+      <div>
+        <label for="role" class="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-purple-600 dark:text-purple-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+          </svg>
+          Role
+        </label>
+        <select
+          id="role"
+          name="role"
+          formControlName="role"
+          required
+          class="w-full px-4 py-2.5 text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-700 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:border-purple-600 dark:focus:border-purple-400 focus:ring-4 focus:ring-purple-100 dark:focus:ring-purple-900/30 outline-none transition-all duration-300 cursor-pointer"
+        >
+          <option value="viewer">Viewer</option>
+          <option value="admin">Admin</option>
+          <option value="owner">Owner</option>
+        </select>
+        <p class="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400 mt-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-purple-600 dark:text-purple-400">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+          </svg>
+          <span>Viewer: Read-only | Admin: Create & manage tasks | Owner: Full access</span>
+        </p>
+      </div>
+
+      <!-- Error Alert -->
+      <div *ngIf="error" class="flex items-center gap-3 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-800 dark:text-red-200 text-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 flex-shrink-0">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        <span>{{ error }}</span>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        [disabled]="loading || registerForm.invalid"
+        class="w-full px-6 py-3 text-white font-semibold bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-xl shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-2"
+      >
+        <svg *ngIf="loading" class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>{{ loading ? 'Creating account...' : 'Create Account' }}</span>
+      </button>
+
+      <!-- Additional Links -->
+      <div class="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-400 mt-2">
+        <span>Already have an account?</span>
+        <a routerLink="/login" class="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-semibold transition-colors">Sign in</a>
+      </div>
+    </form>
+  </div>
+</div>
