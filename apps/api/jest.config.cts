@@ -11,11 +11,11 @@ swcJestConfig.swcrc = false;
 
 module.exports = {
   displayName: '@org/api',
-  preset: '../jest.preset.js',
+  preset: '../../jest.preset.js',
   testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': ['@swc/jest', swcJestConfig],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: 'test-output/jest/coverage',
+  coverageDirectory: '../../test-output/jest/coverage',
 };
