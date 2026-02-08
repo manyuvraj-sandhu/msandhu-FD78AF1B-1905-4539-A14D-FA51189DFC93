@@ -19,6 +19,8 @@ export class AuditService {
     resource: string,
     resourceId: string,
     details?: any,
+    previousState?: any,
+    newState?: any,
   ): Promise<AuditLog> {
     const entry = this.auditRepository.create({
       userId,
@@ -27,6 +29,8 @@ export class AuditService {
       resource,
       resourceId,
       details: details ? JSON.stringify(details) : null,
+      previousState: previousState ? JSON.stringify(previousState) : null,
+      newState: newState ? JSON.stringify(newState) : null,
     });
 
     return this.auditRepository.save(entry);

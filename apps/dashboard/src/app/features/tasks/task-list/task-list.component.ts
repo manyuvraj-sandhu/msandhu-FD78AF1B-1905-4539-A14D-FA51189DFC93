@@ -198,7 +198,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
     this.taskStore.setFilters({ status: statuses });
   }
 
-  onSortChange(sortBy: 'createdAt' | 'title' | 'status'): void {
+  onSortChange(sortBy: 'createdAt' | 'title' | 'status' | 'priority'): void {
     this.taskStore.setSortBy(sortBy);
   }
 

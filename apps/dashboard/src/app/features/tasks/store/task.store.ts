@@ -14,7 +14,7 @@ export interface TaskState {
     category: string[];
     searchQuery: string;
   };
-  sortBy: 'createdAt' | 'title' | 'status';
+  sortBy: 'createdAt' | 'title' | 'status' | 'priority';
   sortOrder: 'asc' | 'desc';
 }
 
@@ -82,6 +82,11 @@ export class TaskStore extends ComponentStore<TaskState> {
           case 'status':
             comparison = a.status.localeCompare(b.status);
             break;
+          case 'priority': {
+            const priorityOrder = { low: 0, medium: 1, high: 2, critical: 3 };
+            comparison = priorityOrder[a.priority] - priorityOrder[b.priority];
+            break;
+          }
           case 'createdAt':
             comparison = new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
             break;

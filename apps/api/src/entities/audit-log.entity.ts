@@ -35,6 +35,12 @@ export class AuditLog {
   @Column({ type: 'text', nullable: true })
   details?: string; // JSON stringified data
 
+  @Column({ type: 'text', nullable: true })
+  previousState?: string; // JSON stringified previous state
+
+  @Column({ type: 'text', nullable: true })
+  newState?: string; // JSON stringified new state
+
   @CreateDateColumn()
   timestamp: Date;
 }

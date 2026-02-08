@@ -43,6 +43,14 @@ export class TasksService {
       'task',
       savedTask.id,
       { title: savedTask.title, status: savedTask.status },
+      null, // no previous state for create
+      { 
+        title: savedTask.title, 
+        status: savedTask.status, 
+        priority: savedTask.priority,
+        description: savedTask.description,
+        category: savedTask.category
+      },
     );
 
     return savedTask;
@@ -79,9 +87,27 @@ export class TasksService {
       throw new ForbiddenException('Insufficient permissions to update task');
     }
 
+    // Capture previous state
+    const previousState = {
+      title: task.title,
+      description: task.description,
+      status: task.status,
+      priority: task.priority,
+      category: task.category,
+    };
+
     Object.assign(task, updateTaskDto);
 
     const updatedTask = await this.taskRepository.save(task);
+
+    // Capture new state
+    const newState = {
+      title: updatedTask.title,
+      description: updatedTask.description,
+      status: updatedTask.status,
+      priority: updatedTask.priority,
+      category: updatedTask.category,
+    };
 
     // Log audit entry
     await this.auditService.log(
@@ -91,6 +117,8 @@ export class TasksService {
       'task',
       updatedTask.id,
       updateTaskDto,
+      previousState,
+      newState,
     );
 
     return updatedTask;
@@ -104,6 +132,15 @@ export class TasksService {
       throw new ForbiddenException('Insufficient permissions to delete task');
     }
 
+    // Capture previous state before deletion
+    const previousState = {
+      title: task.title,
+      description: task.description,
+      status: task.status,
+      priority: task.priority,
+      category: task.category,
+    };
+
     await this.taskRepository.remove(task);
 
     // Log audit entry
@@ -114,6 +151,8 @@ export class TasksService {
       'task',
       id,
       { title: task.title },
+      previousState,
+      null, // no new state for delete
     );
   }
 }

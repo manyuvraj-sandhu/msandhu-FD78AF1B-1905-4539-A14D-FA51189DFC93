@@ -12,6 +12,8 @@ interface AuditLog {
   resource: string;
   resourceId: string;
   details?: string;
+  previousState?: string;
+  newState?: string;
   timestamp: Date;
 }
 
@@ -38,7 +40,10 @@ interface AuditLog {
                   Resource
                 </th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Details
+                  Previous State
+                </th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  New State
                 </th>
               </tr>
             </thead>
@@ -64,7 +69,20 @@ interface AuditLog {
                   {{ log.resource }}
                 </td>
                 <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                  {{ log.details }}
+                  <div *ngIf="log.previousState" class="space-y-1">
+                    <div *ngFor="let item of parseState(log.previousState) | keyvalue" class="text-xs">
+                      <span class="font-medium">{{ item.key }}:</span> {{ item.value }}
+                    </div>
+                  </div>
+                  <span *ngIf="!log.previousState" class="text-gray-400 italic">—</span>
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                  <div *ngIf="log.newState" class="space-y-1">
+                    <div *ngFor="let item of parseState(log.newState) | keyvalue" class="text-xs">
+                      <span class="font-medium">{{ item.key }}:</span> {{ item.value }}
+                    </div>
+                  </div>
+                  <span *ngIf="!log.newState" class="text-gray-400 italic">—</span>
                 </td>
               </tr>
             </tbody>
@@ -85,5 +103,13 @@ export class AuditLogComponent implements OnInit {
 
   ngOnInit(): void {
     this.auditLogs$ = this.http.get<AuditLog[]>(`${environment.apiUrl}/audit-log`);
+  }
+
+  parseState(stateJson: string): Record<string, any> {
+    try {
+      return JSON.parse(stateJson);
+    } catch {
+      return {};
+    }
   }
 }
