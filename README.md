@@ -1,5 +1,11 @@
 # Secure Task Management System
 
+## 📹 Project Walkthrough
+
+[Watch the project walkthrough video](https://drive.google.com/file/d/1N1n6eehCG40gtvUpGq1uxggp-IUenqRq/view?usp=drive_link)
+
+---
+
 Full-stack Task Management System with role-based access control (RBAC) in an Nx monorepo. Features JWT authentication, organization-based multi-tenancy, comprehensive RBAC with role hierarchy, and audit logging.
 
 ## Table of Contents
