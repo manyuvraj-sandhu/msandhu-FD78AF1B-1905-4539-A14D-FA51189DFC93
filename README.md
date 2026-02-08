@@ -1,6 +1,6 @@
 # Secure Task Management System
 
-## 📹 Project Walkthrough
+## Project Walkthrough
 
 [Watch the project walkthrough video](https://drive.google.com/file/d/1N1n6eehCG40gtvUpGq1uxggp-IUenqRq/view?usp=drive_link)
 
